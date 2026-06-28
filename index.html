@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Артур Т. — Python Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A14;
+    --bg-2: #0F0F1E;
+    --purple: #6C3FC5;
+    --blue: #3B82F6;
+    --cyan: #7EE8FA;
+    --text: #F0F0FF;
+    --muted: #8B8BAD;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --gradient: linear-gradient(135deg, var(--purple), var(--blue));
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── noise overlay ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── ambient glow blobs ─── */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 500px; height: 500px; background: var(--purple); top: -150px; right: -100px; }
+  .blob-2 { width: 400px; height: 400px; background: var(--blue); bottom: 10%; left: -100px; }
+
+  /* ─── nav ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10,10,20,0.6);
+    border-bottom: 1px solid var(--glass-border);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 14px 60px; }
+
+  .nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ─── sections ─── */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ─── hero ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--cyan);
+    margin-bottom: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: var(--muted);
+    margin-bottom: 32px;
+    min-height: 2em;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--cyan);
+    margin-left: 3px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .hero-desc {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 480px;
+    margin-bottom: 44px;
+    line-height: 1.7;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 13px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-primary {
+    background: var(--gradient);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 24px rgba(108,63,197,0.35);
+  }
+  .btn-primary:hover { box-shadow: 0 8px 32px rgba(108,63,197,0.5); }
+
+  .btn-ghost {
+    background: var(--glass);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); }
+
+  .hero-orb {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: conic-gradient(from 200deg, var(--purple), var(--blue), var(--cyan), var(--purple));
+    filter: blur(2px);
+    animation: spin 12s linear infinite;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .hero-orb::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ─── section header ─── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+  }
+
+  /* ─── about ─── */
+  #about {
+    padding: 120px 0;
+    background: var(--bg-2);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.75;
+  }
+  .about-text p strong { color: var(--text); }
+
+  .skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .skill-group-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 5px 12px;
+    border-radius: 4px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tag:hover { border-color: var(--purple); color: var(--text); }
+
+  /* ─── projects ─── */
+  #projects { padding: 120px 0; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient);
+    opacity: 0;
+    transition: opacity 0.25s;
+    border-radius: inherit;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(108,63,197,0.4);
+    box-shadow: 0 16px 48px rgba(108,63,197,0.15);
+  }
+  .card:hover::before { opacity: 0.04; }
+
+  .card-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: rgba(108,63,197,0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(108,63,197,0.2);
+  }
+
+  .card-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-link:hover { color: var(--cyan); }
+
+  /* ─── contact ─── */
+  #contact {
+    padding: 120px 0 80px;
+    background: var(--bg-2);
+    text-align: center;
+  }
+
+  .contact-sub {
+    color: var(--muted);
+    max-width: 440px;
+    margin: 0 auto 48px;
+    font-size: 1rem;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ─── footer ─── */
+  footer {
+    padding: 28px 40px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-top: 1px solid var(--glass-border);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── reveal ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .cursor { animation: none; opacity: 1; }
+    .hero-orb { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .btn:hover { transform: none; }
+    .card:hover { transform: none; }
+  }
+
+  /* ─── mobile ─── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { display: none; }
+
+    .container { padding: 0 24px; }
+
+    .hero-inner {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .hero-orb { display: none; }
+    .hero-desc { margin: 0 auto 36px; }
+    .hero-cta { justify-content: center; }
+
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .projects-grid { grid-template-columns: 1fr; }
+
+    #about, #projects, #contact { padding: 80px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- ─── nav ─── -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">AT/</a>
+  <ul class="nav-links">
+    <li><a href="#about">Обо мне</a></li>
+    <li><a href="#projects">Проекты</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+</nav>
+
+<!-- ─── hero ─── -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-eyebrow">// hello, world</p>
+        <h1 class="hero-name">Артур Т.</h1>
+        <p class="hero-title" id="typewriter"><span class="cursor"></span></p>
+        <p class="hero-desc">
+          Пишу Python-инструменты, которые решают реальные задачи: автоматизация, парсинг данных, Telegram-боты и веб-приложения.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">Смотреть проекты</a>
+          <a href="#contact" class="btn btn-ghost">Связаться</a>
+        </div>
+      </div>
+      <div class="hero-orb" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── about ─── -->
+<section id="about">
+  <div class="container">
+    <p class="section-label reveal">О себе</p>
+    <h2 class="section-title reveal">Что я умею</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          Разрабатываю на <strong>Python</strong> — от небольших скриптов до полноценных веб-приложений. Основной фокус: автоматизация рутины, сбор и обработка данных, Telegram-боты.
+        </p>
+        <p>
+          Работал с <strong>Django</strong> на боевых проектах, строил асинхронных ботов на <strong>aiogram v3</strong>, писал парсеры с обходом динамических страниц через <strong>Selenium</strong>.
+        </p>
+        <p>
+          Ценю чистый читаемый код и инструменты, которые действительно работают.
+        </p>
+      </div>
+      <div class="skills-grid reveal">
+        <div>
+          <p class="skill-group-label">// языки</p>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">SQL</span>
+            <span class="tag">HTML / CSS</span>
+            <span class="tag">Bash</span>
+          </div>
+        </div>
+        <div>
+          <p class="skill-group-label">// фреймворки</p>
+          <div class="skill-tags">
+            <span class="tag">Django</span>
+            <span class="tag">aiogram v3</span>
+            <span class="tag">FastAPI</span>
+          </div>
+        </div>
+        <div>
+          <p class="skill-group-label">// инструменты</p>
+          <div class="skill-tags">
+            <span class="tag">Selenium</span>
+            <span class="tag">BeautifulSoup</span>
+            <span class="tag">requests</span>
+            <span class="tag">Telethon</span>
+            <span class="tag">SQLite / PostgreSQL</span>
+            <span class="tag">Git</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── projects ─── -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label reveal">Проекты</p>
+    <h2 class="section-title reveal">Что уже сделано</h2>
+    <div class="projects-grid">
+
+      <article class="card reveal">
+        <p class="card-type">Django · веб-приложение</p>
+        <h3 class="card-title">B2B Платформа заказов</h3>
+        <p class="card-desc">Веб-приложение для управления заказами между бизнесами. Авторизация через django-allauth, кастомная бизнес-логика, развёрнутый бэкенд на Django.</p>
+        <div class="card-footer">
+          <div class="card-tags">
+            <span class="card-tag">Django</span>
+            <span class="card-tag">PostgreSQL</span>
+            <span class="card-tag">allauth</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <p class="card-type">aiogram · Telegram-бот</p>
+        <h3 class="card-title">EMIAS Checker</h3>
+        <p class="card-desc">Бот следит за появлением талонов к нужному врачу на сайте ЕМИАС и отправляет уведомление, как только место освобождается. Автоматизирует ручной мониторинг.</p>
+        <div class="card-footer">
+          <div class="card-tags">
+            <span class="card-tag">Python</span>
+            <span class="card-tag">Selenium</span>
+            <span class="card-tag">Telegram</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <p class="card-type">aiogram v3 · Telegram-бот</p>
+        <h3 class="card-title">Бот поддержки</h3>
+        <p class="card-desc">Телеграм-бот для клиентской поддержки: FSM-диалоги, база данных для хранения тикетов, маршрутизация через aiogram Router.</p>
+        <div class="card-footer">
+          <div class="card-tags">
+            <span class="card-tag">aiogram v3</span>
+            <span class="card-tag">FSM</span>
+            <span class="card-tag">SQLite</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <p class="card-type">парсер · данные</p>
+        <h3 class="card-title">Magnit Parser</h3>
+        <p class="card-desc">Парсит актуальные цены и товары в магазинах Магнит. Бонус: поиск рецептов по ингредиентам из чека. Выгрузка в CSV, XLSX, SQLite.</p>
+        <div class="card-footer">
+          <div class="card-tags">
+            <span class="card-tag">Python</span>
+            <span class="card-tag">Selenium</span>
+            <span class="card-tag">SQLite</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <p class="card-type">парсер · данные</p>
+        <h3 class="card-title">Avito Parser</h3>
+        <p class="card-desc">Парсер объявлений Avito с фильтрацией по категориям, ключевым словам и цене. Поддерживает экспорт результатов для дальнейшей обработки.</p>
+        <div class="card-footer">
+          <div class="card-tags">
+            <span class="card-tag">Python</span>
+            <span class="card-tag">requests</span>
+            <span class="card-tag">JSON</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <p class="card-type">Telethon · мониторинг</p>
+        <h3 class="card-title">Kwork Monitor</h3>
+        <p class="card-desc">Мониторит новые заказы на Kwork по фильтрам и мгновенно присылает уведомление в Telegram. Помогает первым откликаться на релевантные задачи.</p>
+        <div class="card-footer">
+          <div class="card-tags">
+            <span class="card-tag">Python</span>
+            <span class="card-tag">Telethon</span>
+            <span class="card-tag">Telegram</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── contact ─── -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label reveal">Контакты</p>
+    <h2 class="section-title reveal">Давай поговорим</h2>
+    <p class="contact-sub reveal">Открыт к проектам, заказам и интересным задачам. Пишите — отвечу быстро.</p>
+    <div class="contact-links reveal">
+      <a href="https://t.me/Surikat_io" class="btn btn-primary" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/></svg>
+        Telegram
+      </a>
+      <a href="mailto:arturlev2004@gmail.com" class="btn btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </a>
+      <a href="https://github.com/surikatio" class="btn btn-ghost" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span style="color: var(--purple);">©</span> 2025 Артур Т. — сделано с Python и здравым смыслом
+</footer>
+
+<script>
+  // typewriter
+  const phrases = [
+    'Python Developer',
+    'Telegram Bot Builder',
+    'Web Scraping Engineer',
+    'Django Developer',
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const el = document.getElementById('typewriter');
+
+  function type() {
+    const phrase = phrases[pi];
+    const display = deleting ? phrase.slice(0, ci--) : phrase.slice(0, ci++);
+    el.innerHTML = display + '<span class="cursor"></span>';
+
+    let delay = deleting ? 50 : 80;
+    if (!deleting && ci > phrase.length) {
+      delay = 1800;
+      deleting = true;
+    } else if (deleting && ci < 0) {
+      deleting = false;
+      ci = 0;
+      pi = (pi + 1) % phrases.length;
+      delay = 300;
+    }
+    setTimeout(type, delay);
+  }
+  type();
+
+  // nav shrink
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // reveal on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
