@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Артур Т. — Python Developer</title>
+
+<!-- SEO -->
+<meta name="description" content="Python-разработчик: Telegram-боты, парсеры, веб-приложения на Django. Открыт к заказам и проектам.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://surikatio.github.io">
+<meta property="og:title" content="Артур Т. — Python Developer">
+<meta property="og:description" content="Python-разработчик: Telegram-боты, парсеры, веб-приложения на Django. Открыт к заказам и проектам.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Артур Т. — Python Developer">
+<meta name="twitter:description" content="Python-разработчик: Telegram-боты, парсеры, веб-приложения на Django.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236C3FC5'/%3E%3Cstop offset='1' stop-color='%233B82F6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='5' y='22' font-family='monospace' font-size='14' font-weight='bold' fill='white'%3EAT%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -22,7 +36,6 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -34,7 +47,6 @@
     overflow-x: hidden;
   }
 
-  /* ─── noise overlay ─── */
   body::before {
     content: '';
     position: fixed;
@@ -44,7 +56,6 @@
     z-index: 0;
   }
 
-  /* ─── ambient glow blobs ─── */
   .blob {
     position: fixed;
     border-radius: 50%;
@@ -96,14 +107,61 @@
   }
   .nav-links a:hover { color: var(--text); }
 
+  /* burger */
+  .burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+    z-index: 110;
+  }
+  .burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+    transform-origin: center;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    background: rgba(10,10,20,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .mobile-menu.open { opacity: 1; pointer-events: all; }
+  .mobile-menu a {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--cyan); }
+
   /* ─── sections ─── */
   section { position: relative; z-index: 1; }
-
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 40px;
-  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
 
   /* ─── hero ─── */
   #hero {
@@ -111,6 +169,14 @@
     display: flex;
     align-items: center;
     padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #particles {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
   }
 
   .hero-inner {
@@ -119,6 +185,8 @@
     align-items: center;
     gap: 60px;
     width: 100%;
+    position: relative;
+    z-index: 1;
   }
 
   .hero-eyebrow {
@@ -155,11 +223,7 @@
     vertical-align: text-bottom;
     animation: blink 1s step-end infinite;
   }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
   .hero-desc {
     color: var(--muted);
@@ -169,11 +233,7 @@
     line-height: 1.7;
   }
 
-  .hero-cta {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
 
   .btn {
     font-family: 'Space Grotesk', sans-serif;
@@ -184,10 +244,11 @@
     cursor: pointer;
     text-decoration: none;
     letter-spacing: 0.01em;
-    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s, background 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    border: none;
   }
   .btn:hover { transform: translateY(-2px); }
   .btn:active { transform: translateY(0); }
@@ -195,7 +256,6 @@
   .btn-primary {
     background: var(--gradient);
     color: #fff;
-    border: none;
     box-shadow: 0 4px 24px rgba(108,63,197,0.35);
   }
   .btn-primary:hover { box-shadow: 0 8px 32px rgba(108,63,197,0.5); }
@@ -224,7 +284,6 @@
     border-radius: 50%;
     background: var(--bg);
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ─── section header ─── */
@@ -245,10 +304,7 @@
   }
 
   /* ─── about ─── */
-  #about {
-    padding: 120px 0;
-    background: var(--bg-2);
-  }
+  #about { padding: 120px 0; background: var(--bg-2); }
 
   .about-grid {
     display: grid;
@@ -257,18 +313,10 @@
     align-items: start;
   }
 
-  .about-text p {
-    color: var(--muted);
-    margin-bottom: 16px;
-    line-height: 1.75;
-  }
+  .about-text p { color: var(--muted); margin-bottom: 16px; line-height: 1.75; }
   .about-text p strong { color: var(--text); }
 
-  .skills-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+  .skills-grid { display: flex; flex-direction: column; gap: 20px; }
 
   .skill-group-label {
     font-family: 'JetBrains Mono', monospace;
@@ -278,11 +326,7 @@
     margin-bottom: 8px;
   }
 
-  .skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 
   .tag {
     font-family: 'JetBrains Mono', monospace;
@@ -326,11 +370,7 @@
     transition: opacity 0.25s;
     border-radius: inherit;
   }
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(108,63,197,0.4);
-    box-shadow: 0 16px 48px rgba(108,63,197,0.15);
-  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(108,63,197,0.4); box-shadow: 0 16px 48px rgba(108,63,197,0.15); }
   .card:hover::before { opacity: 0.04; }
 
   .card-type {
@@ -379,38 +419,152 @@
     border: 1px solid rgba(108,63,197,0.2);
   }
 
-  .card-link {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: color 0.2s;
-    white-space: nowrap;
+  /* ─── services ─── */
+  #services { padding: 120px 0; background: var(--bg-2); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .service-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 36px 32px;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .service-card:hover { border-color: rgba(108,63,197,0.4); transform: translateY(-3px); }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--gradient);
     display: flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
   }
-  .card-link:hover { color: var(--cyan); }
+
+  .service-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .service-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+
+  .service-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .service-list li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    padding-left: 14px;
+    position: relative;
+  }
+  .service-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--cyan);
+  }
 
   /* ─── contact ─── */
-  #contact {
-    padding: 120px 0 80px;
-    background: var(--bg-2);
-    text-align: center;
+  #contact { padding: 120px 0 80px; background: var(--bg); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
   }
 
-  .contact-sub {
+  .contact-info { }
+  .contact-info .contact-sub {
     color: var(--muted);
-    max-width: 440px;
-    margin: 0 auto 48px;
     font-size: 1rem;
+    line-height: 1.75;
+    margin-bottom: 36px;
   }
 
-  .contact-links {
+  .contact-socials { display: flex; flex-direction: column; gap: 12px; }
+  .contact-social-link {
     display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    transition: color 0.2s;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
   }
+  .contact-social-link:hover { color: var(--text); border-color: rgba(108,63,197,0.4); }
+  .contact-social-link svg { flex-shrink: 0; }
+
+  /* contact form */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-group label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--cyan);
+    letter-spacing: 0.06em;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--muted); }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--purple); }
+
+  .form-group textarea { min-height: 120px; }
+
+  .form-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    border-radius: 6px;
+    display: none;
+  }
+  .form-status.success { display: block; background: rgba(126,232,250,0.08); color: var(--cyan); border: 1px solid rgba(126,232,250,0.2); }
+  .form-status.error { display: block; background: rgba(239,68,68,0.08); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
 
   /* ─── footer ─── */
   footer {
@@ -430,40 +584,42 @@
     transform: translateY(28px);
     transition: opacity 0.6s ease, transform 0.6s ease;
   }
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
+  .reveal.visible { opacity: 1; transform: none; }
 
   /* ─── reduced motion ─── */
   @media (prefers-reduced-motion: reduce) {
     .cursor { animation: none; opacity: 1; }
     .hero-orb { animation: none; }
     .reveal { opacity: 1; transform: none; transition: none; }
-    .btn:hover { transform: none; }
-    .card:hover { transform: none; }
+    .btn:hover, .card:hover, .service-card:hover { transform: none; }
+    #particles { display: none; }
   }
 
   /* ─── mobile ─── */
+  @media (max-width: 900px) {
+    .services-grid { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 768px) {
     nav { padding: 16px 24px; }
     nav.scrolled { padding: 12px 24px; }
     .nav-links { display: none; }
+    .burger { display: flex; }
+    .mobile-menu { display: flex; }
 
     .container { padding: 0 24px; }
 
-    .hero-inner {
-      grid-template-columns: 1fr;
-      text-align: center;
-    }
+    .hero-inner { grid-template-columns: 1fr; text-align: center; }
     .hero-orb { display: none; }
     .hero-desc { margin: 0 auto 36px; }
     .hero-cta { justify-content: center; }
 
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
     .projects-grid { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
 
-    #about, #projects, #contact { padding: 80px 0; }
+    #about, #projects, #services, #contact { padding: 80px 0; }
   }
 </style>
 </head>
@@ -472,18 +628,31 @@
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 
+<!-- mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">Обо мне</a>
+  <a href="#projects" onclick="closeMobile()">Проекты</a>
+  <a href="#services" onclick="closeMobile()">Услуги</a>
+  <a href="#contact" onclick="closeMobile()">Контакты</a>
+</div>
+
 <!-- ─── nav ─── -->
 <nav id="nav">
   <a href="#hero" class="nav-logo">AT/</a>
   <ul class="nav-links">
     <li><a href="#about">Обо мне</a></li>
     <li><a href="#projects">Проекты</a></li>
+    <li><a href="#services">Услуги</a></li>
     <li><a href="#contact">Контакты</a></li>
   </ul>
+  <button class="burger" id="burger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- ─── hero ─── -->
 <section id="hero">
+  <canvas id="particles" aria-hidden="true"></canvas>
   <div class="container">
     <div class="hero-inner">
       <div>
@@ -643,25 +812,103 @@
   </div>
 </section>
 
+<!-- ─── services ─── -->
+<section id="services">
+  <div class="container">
+    <p class="section-label reveal">Услуги</p>
+    <h2 class="section-title reveal">Что могу сделать для вас</h2>
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <div class="service-icon">🤖</div>
+        <h3 class="service-title">Telegram-боты</h3>
+        <p class="service-desc">Разрабатываю ботов любой сложности — от простых уведомлялок до полноценных CRM-систем внутри Telegram.</p>
+        <ul class="service-list">
+          <li>Боты для бизнеса и автоматизации</li>
+          <li>FSM-диалоги, inline-клавиатуры</li>
+          <li>Интеграция с базами данных</li>
+          <li>Уведомления и мониторинг</li>
+        </ul>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🕷️</div>
+        <h3 class="service-title">Парсинг и автоматизация</h3>
+        <p class="service-desc">Собираю данные с любых сайтов, автоматизирую рутинные задачи и выгружаю результаты в нужном формате.</p>
+        <ul class="service-list">
+          <li>Парсинг статичных и динамических сайтов</li>
+          <li>Мониторинг цен и объявлений</li>
+          <li>Выгрузка в Excel / CSV / БД</li>
+          <li>Обход защит и капчи</li>
+        </ul>
+      </div>
+
+      <div class="service-card reveal">
+        <div class="service-icon">🌐</div>
+        <h3 class="service-title">Веб-разработка</h3>
+        <p class="service-desc">Создаю веб-приложения и API на Python — от простых лендингов до многостраничных платформ.</p>
+        <ul class="service-list">
+          <li>Сайты и веб-приложения на Django</li>
+          <li>REST API на FastAPI</li>
+          <li>Авторизация, формы, панель администратора</li>
+          <li>Деплой на сервер</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ─── contact ─── -->
 <section id="contact">
   <div class="container">
     <p class="section-label reveal">Контакты</p>
     <h2 class="section-title reveal">Давай поговорим</h2>
-    <p class="contact-sub reveal">Открыт к проектам, заказам и интересным задачам. Пишите — отвечу быстро.</p>
-    <div class="contact-links reveal">
-      <a href="https://t.me/Surikat_io" class="btn btn-primary" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/></svg>
-        Telegram
-      </a>
-      <a href="mailto:arturlev2004@gmail.com" class="btn btn-ghost">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Email
-      </a>
-      <a href="https://github.com/surikatio" class="btn btn-ghost" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-        GitHub
-      </a>
+    <div class="contact-grid">
+
+      <div class="contact-info reveal">
+        <p class="contact-sub">
+          Открыт к проектам, заказам и интересным задачам. Напишите — расскажите, что нужно сделать, обсудим детали и стоимость.
+        </p>
+        <div class="contact-socials">
+          <a href="https://t.me/Surikat_io" class="contact-social-link" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z"/></svg>
+            Telegram @Surikat_io
+          </a>
+          <a href="mailto:arturlev2004@gmail.com" class="contact-social-link">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            arturlev2004@gmail.com
+          </a>
+          <a href="https://github.com/surikatio" class="contact-social-link" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            github.com/surikatio
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <!-- Форма отправляет сообщения через Formspree. -->
+        <!-- Зарегистрируйся на formspree.io и замени XXXXXXXX своим ID формы. -->
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/XXXXXXXX" method="POST">
+          <div class="form-group">
+            <label for="name">// имя</label>
+            <input type="text" id="name" name="name" placeholder="Как вас зовут?" required>
+          </div>
+          <div class="form-group">
+            <label for="contact-input">// telegram или email</label>
+            <input type="text" id="contact-input" name="contact" placeholder="@username или email" required>
+          </div>
+          <div class="form-group">
+            <label for="message">// сообщение</label>
+            <textarea id="message" name="message" placeholder="Опишите задачу..." required></textarea>
+          </div>
+          <div id="formStatus" class="form-status"></div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+            Отправить сообщение
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
 </section>
@@ -671,41 +918,102 @@
 </footer>
 
 <script>
-  // typewriter
-  const phrases = [
-    'Python Developer',
-    'Telegram Bot Builder',
-    'Web Scraping Engineer',
-    'Django Developer',
-  ];
+  // ─── typewriter ───
+  const phrases = ['Python Developer', 'Telegram Bot Builder', 'Web Scraping Engineer', 'Django Developer'];
   let pi = 0, ci = 0, deleting = false;
-  const el = document.getElementById('typewriter');
+  const twEl = document.getElementById('typewriter');
 
   function type() {
     const phrase = phrases[pi];
     const display = deleting ? phrase.slice(0, ci--) : phrase.slice(0, ci++);
-    el.innerHTML = display + '<span class="cursor"></span>';
-
+    twEl.innerHTML = display + '<span class="cursor"></span>';
     let delay = deleting ? 50 : 80;
-    if (!deleting && ci > phrase.length) {
-      delay = 1800;
-      deleting = true;
-    } else if (deleting && ci < 0) {
-      deleting = false;
-      ci = 0;
-      pi = (pi + 1) % phrases.length;
-      delay = 300;
-    }
+    if (!deleting && ci > phrase.length) { delay = 1800; deleting = true; }
+    else if (deleting && ci < 0) { deleting = false; ci = 0; pi = (pi + 1) % phrases.length; delay = 300; }
     setTimeout(type, delay);
   }
   type();
 
-  // nav shrink
+  // ─── nav ───
   window.addEventListener('scroll', () => {
     document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
   }, { passive: true });
 
-  // reveal on scroll
+  // ─── burger ───
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+
+  function closeMobile() {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ─── particles ───
+  (function () {
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, dots;
+    const COUNT = 55, MAX_DIST = 130;
+
+    function resize() {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+
+    function mkDot() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+      };
+    }
+
+    function init() { resize(); dots = Array.from({ length: COUNT }, mkDot); }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        d.x += d.vx; d.y += d.vy;
+        if (d.x < 0 || d.x > W) d.vx *= -1;
+        if (d.y < 0 || d.y > H) d.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(126,232,250,0.35)';
+        ctx.fill();
+
+        for (let j = i + 1; j < dots.length; j++) {
+          const b = dots[j];
+          const dx = d.x - b.x, dy = d.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MAX_DIST) {
+            ctx.beginPath();
+            ctx.moveTo(d.x, d.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(108,63,197,${0.18 * (1 - dist / MAX_DIST)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize, { passive: true });
+    init();
+    draw();
+  })();
+
+  // ─── reveal ───
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.12 });
@@ -713,6 +1021,36 @@
   document.querySelectorAll('.reveal').forEach((el, i) => {
     el.style.transitionDelay = `${(i % 4) * 80}ms`;
     observer.observe(el);
+  });
+
+  // ─── contact form ───
+  document.getElementById('contactForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const status = document.getElementById('formStatus');
+    const btn = this.querySelector('button[type=submit]');
+    btn.disabled = true;
+    btn.textContent = 'Отправляю...';
+    status.className = 'form-status';
+
+    try {
+      const res = await fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        status.className = 'form-status success';
+        status.textContent = '// сообщение отправлено — отвечу в ближайшее время';
+        this.reset();
+      } else {
+        throw new Error();
+      }
+    } catch {
+      status.className = 'form-status error';
+      status.textContent = '// ошибка отправки — напишите напрямую в Telegram';
+    }
+    btn.disabled = false;
+    btn.textContent = 'Отправить сообщение';
   });
 </script>
 </body>
